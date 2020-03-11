@@ -7,3 +7,23 @@
 //
 
 import Foundation
+
+struct Card{
+    
+    var isFaceUp = false
+    var isMatched = false
+    var isMismatched = false
+    var cardId: Int
+    
+    private static var cardIdFactory = 0
+    
+    private static func getUniqueId() -> Int{
+        cardIdFactory += 1
+        return cardIdFactory
+    }
+    
+    init(){
+        self.cardId = Card.getUniqueId()
+    }
+    
+}

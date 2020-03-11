@@ -9,15 +9,24 @@
 import UIKit
 
 class ViewController: UIViewController {
-
+    
     private lazy var game = Game(numberOfPairOfCards: numberOfPairOfCards)
     
     var numberOfPairOfCards: Int {
-            return (cardButtons.count + 1) / 2
+        return (cardButtons.count + 1) / 2
     }
-    
-    @IBOutlet private var cardButtons: [UIButton]!
 
+    weak var timer: Timer?
+    var startTime: Double = 0
+    var currentTime: Double = 0
+    var cardFirstTouch = true
+    private let userDefault = UserDefaults.standard
+    
+    
+    @IBOutlet weak var bestTimeLabel: UILabel!
+    @IBOutlet weak var timerLabel: UILabel!
+    @IBOutlet private var cardButtons: [UIButton]!
+    
     let emojiThemes = ["Halloween": ["🧟‍♀️", "🧛🏻‍♂️", "🤡", "😈", "🎃", "🎁", "🙀", "🧠"],
                        "Nature": ["🌚", "🌈", "❄️", "☘️", "🍎", "🌻", "🌵", "🍌"],
                        "Faces": ["🤪", "😭", "🥵", "🤬", "🤮", "🤠", "🤒", "🥶"],
@@ -35,9 +44,17 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         newGame()
+        
+        bestTimeLabel.text = String(format: "%.2f", userDefault.double(forKey: "bestTime"))
+        
+        
     }
     
     @IBAction private func touchCard(_ sender: UIButton) {
+        if cardFirstTouch{
+            startTimer()
+            cardFirstTouch = false
+        }
         if let cardNumber = cardButtons.firstIndex(of: sender){
             game.chooseCard(at: cardNumber)
             updateViewFromModel()
@@ -45,6 +62,8 @@ class ViewController: UIViewController {
         
     }
     fileprivate func newGame() {
+        stopTimer()
+        cardFirstTouch = true
         game = Game(numberOfPairOfCards: numberOfPairOfCards)
         let themeChooser = emojiThemes.randomElement()!
         emojiChoices = themeChooser.value
@@ -53,8 +72,36 @@ class ViewController: UIViewController {
     }
     
     @IBAction func startNewGame(_ sender: UIButton) {
+        
         newGame()
     }
+    
+    
+    
+    
+    func startTimer(){
+        startTime = Date().timeIntervalSinceReferenceDate
+        timer = Timer.scheduledTimer(timeInterval: 0.05,
+                                     target: self,
+                                     selector: #selector(advanceTimer(timer:)),
+                                     userInfo: nil,
+                                     repeats: true)
+    }
+    
+    //When the view controller is about to disappear, invalidate the timer
+    func stopTimer(){
+        timer?.invalidate()
+        
+    }
+    
+    
+    @objc func advanceTimer(timer: Timer) {
+        //Total time since timer started, in seconds
+        currentTime = Date().timeIntervalSinceReferenceDate - startTime
+        let timeString = String(format: "%.2f", currentTime)
+        timerLabel.text = timeString
+    }
+    
     
     func updateViewFromModel(){
         for index in cardButtons.indices{
@@ -63,15 +110,42 @@ class ViewController: UIViewController {
             if card.isFaceUp{
                 button.setTitle(emoji(for: card), for: .normal)
                 button.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
-               
+                
             }else{
                 button.setTitle("", for: .normal)
                 button.backgroundColor = card.isMatched ? #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0) : #colorLiteral(red: 0.7450980544, green: 0.1568627506, blue: 0.07450980693, alpha: 1)
             }
         }
         if game.gameOver{
-            print("GameOver")
+            gameOver()
         }
+    }
+    
+    fileprivate func showAlert() {
+        let alert = UIAlertController(title: "Game Over", message: "", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "New Game", style: .default, handler: { action in
+            self.newGame()
+        }))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    func gameOver(){
+        print("GameOver - \(String(format: "%.2f", currentTime))")
+        stopTimer()
+        updateBestTime()
+        showAlert()
+    }
+    
+    func updateBestTime(){
+        let bestTime = userDefault.double(forKey: "bestTime")
+        if bestTime == 0.0{
+            userDefault.set(currentTime, forKey: "bestTime")
+            bestTimeLabel.text = String(format: "%.2f", currentTime)
+        }else if bestTime > currentTime{
+            userDefault.set(currentTime, forKey: "bestTime")
+            bestTimeLabel.text = String(format: "%.2f", currentTime)
+        }
+        
     }
     
     private lazy var emojiChoices = emojiThemes.randomElement()!.value

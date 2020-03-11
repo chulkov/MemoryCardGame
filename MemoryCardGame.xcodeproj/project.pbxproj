@@ -15,6 +15,7 @@
 		508339AE2418B43000AA7E25 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 508339AC2418B43000AA7E25 /* LaunchScreen.storyboard */; };
 		508339B82418BB5C00AA7E25 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508339B72418BB5C00AA7E25 /* Card.swift */; };
 		508339BA2418BB8F00AA7E25 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508339B92418BB8F00AA7E25 /* Game.swift */; };
+		508339BE2418D65300AA7E25 /* SupportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508339BD2418D65300AA7E25 /* SupportViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		508339AF2418B43000AA7E25 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		508339B72418BB5C00AA7E25 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 		508339B92418BB8F00AA7E25 /* Game.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
+		508339BD2418D65300AA7E25 /* SupportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +64,7 @@
 			children = (
 				508339B52418BB1B00AA7E25 /* Supporting Files */,
 				508339A52418B42E00AA7E25 /* ViewController.swift */,
+				508339BD2418D65300AA7E25 /* SupportViewController.swift */,
 				508339B62418BB4B00AA7E25 /* Model */,
 				508339A72418B42E00AA7E25 /* Main.storyboard */,
 				508339AF2418B43000AA7E25 /* Info.plist */,
@@ -162,6 +165,7 @@
 			files = (
 				508339A62418B42E00AA7E25 /* ViewController.swift in Sources */,
 				508339BA2418BB8F00AA7E25 /* Game.swift in Sources */,
+				508339BE2418D65300AA7E25 /* SupportViewController.swift in Sources */,
 				508339A22418B42E00AA7E25 /* AppDelegate.swift in Sources */,
 				508339A42418B42E00AA7E25 /* SceneDelegate.swift in Sources */,
 				508339B82418BB5C00AA7E25 /* Card.swift in Sources */,
